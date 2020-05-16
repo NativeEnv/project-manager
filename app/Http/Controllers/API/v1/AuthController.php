@@ -28,13 +28,22 @@ class AuthController extends Controller
     }
 
     /**
+     * http://site.local/api/v1/auth/identity
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function identity()
+    {
+        return response()->json(auth()->user());
+    }
+
+    /**
      * http://site.local/api/v1/auth/refresh
      * @method POST
      *
-     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function refresh(Request $request)
+    public function refresh()
     {
         return $this->respondWithToken(auth()->refresh());
     }
@@ -52,5 +61,4 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'Successfully logged out']);
     }
-
 }
