@@ -24,6 +24,9 @@ class UserController extends Controller
     }
 
     /**
+     * http://site.local/api/v1/users/{id}
+     * @method GET
+     *
      * @param $id
      * @return mixed
      */
