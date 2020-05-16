@@ -26,6 +26,7 @@ Route::group(['prefix' => 'v1'], function() {
      */
     Route::group(['prefix' => 'auth'], function() {
         Route::post('login', 'API\v1\AuthController@login');
+        Route::get('identity', 'API\v1\AuthController@identity')->middleware('auth:api');
         Route::post('refresh', 'API\v1\AuthController@refresh')->middleware('auth:api');
         Route::post('logout', 'API\v1\AuthController@logout')->middleware('auth:api');
     });
@@ -36,5 +37,13 @@ Route::group(['prefix' => 'v1'], function() {
     Route::group(['prefix' => 'users'], function() {
         Route::post('', 'API\v1\UserController@create');
         Route::get('{id}', 'API\v1\UserController@show')->where('id', '\d+')->middleware('auth:api');
+    });
+
+    /**
+     * Projects
+     */
+    Route::group(['prefix' => 'projects'], function() {
+        Route::post('', 'API\v1\ProjectController@create')->middleware('auth:api');
+        Route::get('{id}', 'API\v1\ProjectController@show')->where('id', '\d+');
     });
 });
