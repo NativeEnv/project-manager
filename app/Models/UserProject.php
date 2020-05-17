@@ -17,6 +17,8 @@ class UserProject extends Model
      */
     public static function userIsParticipant(User $user, Project $project) : bool
     {
-        return self::where('id_user', '=', $user->id)->where('id_project', '=', $project->id)->count() > 0;
+        return self::where('id_user', '=', $user->id)->
+                     where('id_project', '=', $project->id)->
+                     count() > 0;
     }
 }
