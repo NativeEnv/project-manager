@@ -18,7 +18,7 @@ class ProjectController extends Controller
      */
     public function create(ProjectCreateRequest $request)
     {
-        $project = Project::create($request->input());
+        $project = Project::createProject($request->input());
 
         return response()->json(['project' => $project], 201);
     }
