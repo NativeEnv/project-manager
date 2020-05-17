@@ -31,7 +31,7 @@ class UserProject extends Model
                      where('id_project', '=', $project->id)->
                      first();
     }
-    
+
     /**
      * @param User $user
      * @param \App\Models\Project $project
