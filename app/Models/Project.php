@@ -49,6 +49,19 @@ class Project extends Model
     }
 
     /**
+     * @return int
+     */
+    public function getAccess()
+    {
+        return $this->access;
+    }
+
+    public function issetGeneralAccess()
+    {
+        return $this->getAccess() == self::GENERAL_ACCESS;
+    }
+
+    /**
      * @param User $user
      * @return bool
      */
