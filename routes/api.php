@@ -45,5 +45,13 @@ Route::group(['prefix' => 'v1'], function() {
     Route::group(['prefix' => 'projects'], function() {
         Route::post('', 'API\v1\ProjectController@create')->middleware('auth:api');
         Route::get('{id}', 'API\v1\ProjectController@show')->where('id', '\d+');
+
+        /**
+         * A project settings
+         */
+        Route::patch(
+            '{id_project}/settings/access',
+            'API\v1\ProjectSettingsController@settingsAccess'
+        )->where('id_project', '\d+')->middleware('auth:api');
     });
 });
