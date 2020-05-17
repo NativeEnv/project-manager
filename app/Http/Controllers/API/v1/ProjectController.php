@@ -18,9 +18,10 @@ class ProjectController extends Controller
      */
     public function create(ProjectCreateRequest $request)
     {
-        $project = Project::createProject($request->input());
-
-        return response()->json(['project' => $project], 201);
+        return $this->responseCreated(
+            'project',
+            Project::createProject($request->input())
+        );
     }
 
     /**
@@ -44,6 +45,6 @@ class ProjectController extends Controller
             return $this->responsePermissionDenied();
         }
 
-        return response()->json(['project' => $project]);
+        return $this->responseSuccess('project', $project);
     }
 }
