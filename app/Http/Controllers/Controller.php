@@ -11,6 +11,11 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    protected function responseSuccess($key, $data)
+    {
+        return response()->json([$key => $data]);
+    }
+
     protected function respondWithToken($token)
     {
         return response()->json([
@@ -28,5 +33,10 @@ class Controller extends BaseController
     protected function responsePermissionDenied()
     {
         return response()->json(['error' => 'Permission denied'], 403);
+    }
+
+    protected function responseCreated($key, $data)
+    {
+        return response()->json([$key => $data], 201);
     }
 }
