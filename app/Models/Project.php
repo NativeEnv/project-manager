@@ -40,7 +40,7 @@ class Project extends Model
     protected $table = 'project';
 
     protected $fillable = [
-        'title', 'description', 'id_user'
+        'title', 'description', 'id_user', 'access'
     ];
 
     public function hasSupport()
@@ -79,4 +79,24 @@ class Project extends Model
         return false;
     }
 
+    public static function createProject(Array $data)
+    {
+        $project = self::create($data);
+
+        if(isset($data['access']) && $data['access'] == self::VERIFICATION_ACCESS)
+        {
+            UserProject::create([
+                'id_user' => $project->id_user,
+                'id_project' => $project->id,
+                'status' => UserProject::CREATOR_STATUS
+            ]);
+        }
+
+        return $project;
+    }
+
+    public static function getAccessCodes()
+    {
+        return [self::GENERAL_ACCESS, self::VERIFICATION_ACCESS];
+    }
 }
