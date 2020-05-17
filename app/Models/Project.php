@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\User;
 use App\Models\UserProject;
+use App\Storages\TasksStorages;
 
 /**
  * Class Project
@@ -37,12 +38,39 @@ class Project extends Model
      */
     const VERIFICATION_ACCESS = 1;
 
+    /**
+     * @var TasksStorages|null
+     */
+    private $tasksStorage;
+
     protected $table = 'project';
 
     protected $fillable = [
         'title', 'description', 'id_user', 'access'
     ];
 
+    public function __construct(array $attributes = [])
+    {
+        $this->tasksStorage = null;
+
+        parent::__construct($attributes);
+    }
+
+    /**
+     * @return TasksStorages|null
+     */
+    public function getTasks()
+    {
+        if($this->tasksStorage == null)
+        {
+            $this->tasksStorage = new TasksStorages($this->id);
+        }
+        return $this->tasksStorage;
+    }
+
+    /**
+     * @return int
+     */
     public function hasSupport()
     {
         return $this->has_support;
@@ -56,7 +84,10 @@ class Project extends Model
         return $this->access;
     }
 
-    public function issetGeneralAccess()
+    /**
+     * @return bool
+     */
+    public function issetGeneralAccess() : bool
     {
         return $this->getAccess() == self::GENERAL_ACCESS;
     }
@@ -79,6 +110,10 @@ class Project extends Model
         return false;
     }
 
+    /**
+     * @param array $data
+     * @return mixed
+     */
     public static function createProject(Array $data)
     {
         $project = self::create($data);
@@ -95,6 +130,9 @@ class Project extends Model
         return $project;
     }
 
+    /**
+     * @return array
+     */
     public static function getAccessCodes()
     {
         return [self::GENERAL_ACCESS, self::VERIFICATION_ACCESS];
