@@ -53,5 +53,17 @@ Route::group(['prefix' => 'v1'], function() {
             '{id_project}/settings/access',
             'API\v1\ProjectSettingsController@settingsAccess'
         )->where('id_project', '\d+')->middleware('auth:api');
+
+
+        /**
+         * Tasks
+         */
+        Route::post('{id_project}/tasks', 'API\v1\TaskController@create')->
+               where('id_project', '\d+')->
+               middleware('auth:api');
+
+        Route::get('{id_project}/tasks/{id_task?}', 'API\v1\TaskController@show')->
+               where('id_project', '\d+')->
+               where('id', '\d+');
     });
 });
