@@ -32,7 +32,8 @@ class ProjectCreateRequest extends FormRequest
         return [
             'title' => 'required|min:3|max:255|regex:~\w+~',
             'description' => 'required|min:3|max:255',
-            'id_user' => 'exists:user,id'
+            'id_user' => 'exists:user,id',
+            'access' => 'min:0|max:1'
         ];
     }
 }
