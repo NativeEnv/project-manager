@@ -19,4 +19,14 @@ class Controller extends BaseController
             'expires_in' => auth()->factory()->getTTL() * 60
         ]);
     }
+
+    protected function responseUnauthorized()
+    {
+        return response()->json(['error' => 'Unauthorized'], 401);
+    }
+
+    protected function responsePermissionDenied()
+    {
+        return response()->json(['error' => 'Permission denied'], 403);
+    }
 }
