@@ -20,7 +20,7 @@ class ProjectController extends Controller
     {
         $project = Project::create($request->input());
 
-        return response()->json(['project' => $project]);
+        return response()->json(['project' => $project], 201);
     }
 
     /**
@@ -34,9 +34,14 @@ class ProjectController extends Controller
     {
         $project = Project::findOrFail($id);
 
-        if(!$project->userHasAccess(auth()->user()))
+        if(!$project->issetGeneralAccess() && auth()->user() === null)
         {
-            return response()->json(['message' => 'Permission denied'], 403);
+            return $this->responseUnauthorized();
+        }
+
+        if(!$project->issetGeneralAccess() && !$project->userHasAccess(auth()->user()))
+        {
+            return $this->responsePermissionDenied();
         }
 
         return response()->json(['project' => $project]);
