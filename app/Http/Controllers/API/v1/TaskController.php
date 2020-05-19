@@ -10,6 +10,15 @@ use App\Http\Requests\TaskCreateRequest;
 
 class TaskController extends Controller
 {
+    public function index($id_project)
+    {
+        $project = Project::findOrFail($id_project);
+
+        return $this->jsonResponse([
+            'tasks' => $project->getTasks()->all()
+        ]);
+    }
+
     /**
      * http://site.local/api/v1/projects/{id_project}/tasks
      * @method POST
@@ -31,37 +40,26 @@ class TaskController extends Controller
     }
 
     /**
-     * Show all tasks:
-     *  http://site.local/api/v1/projects/{id_project}/tasks
-     *
-     * Show the task:
-     *  http://site.local/api/v1/projects/{id_project}/tasks/{id_task}
+     * http://site.local/api/v1/projects/{id_project}/tasks/{$id_task}
      *
      * @param $id_project
      * @param null $id_task
      *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
-    public function show($id_project, $id_task = null)
+    public function show($id_project, $id_task)
     {
         $project = Project::findOrFail($id_project);
 
         if(!$project->userHasAccess(auth()->user())) $this->responsePermissionDenied();
 
-        if($id_task != null)
+        if(!$task = $project->getTasks()->find($id_task))
         {
-            if(!$task = $project->getTasks()->find($id_task))
-            {
-                return $this->responseNotFound();
-            }
-
-            return $this->jsonResponse([
-                'task' => $task
-            ]);
+            return $this->responseNotFound();
         }
 
         return $this->jsonResponse([
-            'tasks' => $project->getTasks()->all()
+            'task' => $task
         ]);
     }
 }
