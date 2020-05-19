@@ -61,8 +61,9 @@ Route::group(['prefix' => 'v1'], function() {
         Route::post('{id_project}/tasks', 'API\v1\TaskController@create')->
                where('id_project', '\d+')->
                middleware('auth:api');
-
-        Route::get('{id_project}/tasks/{id_task?}', 'API\v1\TaskController@show')->
+        Route::get('{id_project}/tasks', 'API\v1\TaskController@index')->
+               where('id_project', '\d+');
+        Route::get('{id_project}/tasks/{id_task}', 'API\v1\TaskController@show')->
                where('id_project', '\d+')->
                where('id', '\d+');
     });
