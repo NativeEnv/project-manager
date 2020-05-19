@@ -30,7 +30,7 @@ class TasksStorages implements IStorage
     /**
      * @return array
      */
-    public function get()
+    public function all()
     {
         return $this->_tasks;
     }

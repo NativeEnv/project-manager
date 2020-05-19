@@ -85,28 +85,23 @@ class Project extends Model
     }
 
     /**
+     * @param User|null $user
      * @return bool
      */
-    public function issetGeneralAccess() : bool
-    {
-        return $this->getAccess() == self::GENERAL_ACCESS;
-    }
-
-    /**
-     * @param User $user
-     * @return bool
-     */
-    public function userHasAccess(User $user) : bool
+    public function userHasAccess($user) : bool
     {
         if($this->access == self::GENERAL_ACCESS)
         {
             return true;
         }
+        if($this->access != self::GENERAL_ACCESS && $user === null)
+        {
+            return false;
+        }
         if($this->access == self::VERIFICATION_ACCESS)
         {
             return UserProject::userIsParticipant($user, $this);
         }
-
         return false;
     }
 
