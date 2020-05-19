@@ -10,6 +10,10 @@ use App\Http\Requests\TaskCreateRequest;
 
 class TaskController extends Controller
 {
+    /**
+     * @param $id_project
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index($id_project)
     {
         $project = Project::findOrFail($id_project);
