@@ -16,7 +16,7 @@ class ProjectSettingsController extends Controller
         {
             return $this->responsePermissionDenied();
         }
-        return response()->json(['message' => 'patched']);
+        return $this->jsonResponse(['message' => 'patched']);
     }
 
     /**

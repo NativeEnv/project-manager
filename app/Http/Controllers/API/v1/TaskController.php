@@ -20,12 +20,14 @@ class TaskController extends Controller
      */
     public function create(TaskCreateRequest $request, $id_project)
     {
-        $request->merge(['id_project' => $id_project]);
+        $request->merge([
+            'id_project' => $id_project,
+            'id_user' => auth()->user()->id
+        ]);
 
-        return $this->responseCreated(
-            'task',
-            Task::create($request->input())
-        );
+        return $this->responseCreated([
+            'task' => Task::create($request->input())
+        ]);
     }
 
     /**
@@ -44,20 +46,22 @@ class TaskController extends Controller
     {
         $project = Project::findOrFail($id_project);
 
-        if(!$project->issetGeneralAccess() && auth()->user() === null)
+        if(!$project->userHasAccess(auth()->user())) $this->responsePermissionDenied();
+
+        if($id_task != null)
         {
-            return $this->responseUnauthorized();
+            if(!$task = $project->getTasks()->find($id_task))
+            {
+                return $this->responseNotFound();
+            }
+
+            return $this->jsonResponse([
+                'task' => $task
+            ]);
         }
 
-        if(!$project->issetGeneralAccess() && !$project->userHasAccess(auth()->user()))
-        {
-            return $this->responsePermissionDenied();
-        }
-
-        if($id_task)
-        {
-            return $this->responseSuccess('task', $project->getTasks()->find($id_task));
-        }
-        return $this->responseSuccess('tasks', $project->getTasks()->get());
+        return $this->jsonResponse([
+            'tasks' => $project->getTasks()->all()
+        ]);
     }
 }

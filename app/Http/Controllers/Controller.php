@@ -11,32 +11,56 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    protected function responseSuccess($key, $data)
+    /**
+     * @param array $data
+     * @param int $code
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function jsonResponse(Array $data, $code = 200)
     {
-        return response()->json([$key => $data]);
+        return response()->json($data, $code);
     }
 
+    /**
+     * @param $token
+     * @return \Illuminate\Http\JsonResponse
+     */
     protected function respondWithToken($token)
     {
-        return response()->json([
+        return $this->jsonResponse([
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60
         ]);
     }
 
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     protected function responseUnauthorized()
     {
-        return response()->json(['error' => 'Unauthorized'], 401);
+        return $this->jsonResponse(['error' => 'Unauthorized'], 401);
     }
 
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     protected function responsePermissionDenied()
     {
-        return response()->json(['error' => 'Permission denied'], 403);
+        return $this->jsonResponse(['error' => 'Permission denied'], 403);
     }
 
-    protected function responseCreated($key, $data)
+    /**
+     * @param array $data
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function responseCreated(Array $data)
     {
-        return response()->json([$key => $data], 201);
+        return $this->jsonResponse($data, 201);
+    }
+
+    protected function responseNotFound()
+    {
+        return $this->jsonResponse(['message' => 'Not Found'], 404);
     }
 }

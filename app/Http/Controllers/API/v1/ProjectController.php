@@ -18,10 +18,9 @@ class ProjectController extends Controller
      */
     public function create(ProjectCreateRequest $request)
     {
-        return $this->responseCreated(
-            'project',
-            Project::createProject($request->input())
-        );
+        return $this->responseCreated([
+            'project' => Project::createProject($request->input())
+        ]);
     }
 
     /**
@@ -35,16 +34,8 @@ class ProjectController extends Controller
     {
         $project = Project::findOrFail($id);
 
-        if(!$project->issetGeneralAccess() && auth()->user() === null)
-        {
-            return $this->responseUnauthorized();
-        }
+        if(!$project->userHasAccess(auth()->user())) $this->responsePermissionDenied();
 
-        if(!$project->issetGeneralAccess() && !$project->userHasAccess(auth()->user()))
-        {
-            return $this->responsePermissionDenied();
-        }
-
-        return $this->responseSuccess('project', $project);
+        return $this->jsonResponse(['project' => $project]);
     }
 }

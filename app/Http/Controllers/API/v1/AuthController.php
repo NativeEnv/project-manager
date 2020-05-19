@@ -34,7 +34,7 @@ class AuthController extends Controller
      */
     public function identity()
     {
-        return response()->json(auth()->user());
+        return $this->jsonResponse(['user' => auth()->user()]);
     }
 
     /**
@@ -59,6 +59,6 @@ class AuthController extends Controller
     {
         auth()->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return $this->jsonResponse(['message' => 'Successfully logged out']);
     }
 }

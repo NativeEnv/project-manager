@@ -18,9 +18,9 @@ class UserController extends Controller
      */
     public function create(UserCreateRequest $request)
     {
-        $user = User::createUser($request->input());
-
-        return response()->json(['user' => $user], 201);
+        return $this->responseCreated([
+            'user' => User::createUser($request->input())
+        ]);
     }
 
     /**
