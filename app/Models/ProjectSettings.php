@@ -59,6 +59,7 @@ class ProjectSettings extends Model
     public function userCanSetup($optionName) : bool
     {
         if(!isset($this->rules[$optionName])) return false;
+        if(!$this->_user_project) return false;
         return in_array($this->_user_project->status, $this->rules[$optionName]);
     }
 
