@@ -5,6 +5,7 @@ namespace App\Storages;
 use App\Storages\IStorage;
 
 use App\Models\Task;
+use Exception;
 
 /**
  * Class TasksStorages
@@ -24,7 +25,7 @@ class TasksStorages implements IStorage
      */
     public function __construct($id_project)
     {
-        $this->_tasks = Task::where('id_project', $id_project)->get();
+        $this->_tasks = Task::where('id_project', $id_project)->get()->toArray();
     }
 
     /**
@@ -43,7 +44,7 @@ class TasksStorages implements IStorage
     {
         foreach($this->_tasks as $task)
         {
-            if($task->id == $id) return $task;
+            if($task['id'] == $id) return $task;
         }
         return null;
     }
