@@ -59,12 +59,18 @@ Route::group(['prefix' => 'v1'], function() {
          * Tasks for a project
          */
         Route::post('{id_project}/tasks', 'API\v1\TaskController@create')->
-               where('id_project', '\d+')->
-               middleware('auth:api');
+               where('id_project', '\d+');
         Route::get('{id_project}/tasks', 'API\v1\TaskController@index')->
                where('id_project', '\d+');
         Route::get('{id_project}/tasks/{id_task}', 'API\v1\TaskController@show')->
                where('id_project', '\d+')->
                where('id', '\d+');
+
+        /**
+         * Support for a project
+         */
+        Route::post('{id_project}/supports', 'API\v1\SupportController@create')->where('id_project', '\d+');
+        Route::get('{id_project}/supports', 'API\v1\SupportController@index')->where('id_project', '\d+');
+        Route::get('{id_project}/supports/{id_support_message}', 'API\v1\SupportController@show')->where('id_project', '\d+');
     });
 });
