@@ -10,6 +10,12 @@ use App\Http\Requests\ProjectSettingsRequest;
 
 class ProjectSettingsController extends Controller
 {
+    /**
+     * Response extension
+     *
+     * @param $result
+     * @return \Illuminate\Http\JsonResponse
+     */
     protected function responseWithResult($result)
     {
         if($result == ProjectSettings::PERMISSION_DENIED_RESULT)

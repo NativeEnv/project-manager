@@ -17,10 +17,13 @@ class TaskController extends Controller
     public function index($id_project)
     {
         $project = Project::findOrFail($id_project);
+        if(!$project->userHasAccess(auth()->user())) return $this->responsePermissionDenied();
 
-        return $this->jsonResponse([
-            'tasks' => $project->getTasks()->all()
-        ]);
+        $tasks = $project->getTasks()->all();
+
+        if(!$tasks) return $this->responseNotFound();
+
+        return $tasks;
     }
 
     /**
@@ -33,14 +36,15 @@ class TaskController extends Controller
      */
     public function create(TaskCreateRequest $request, $id_project)
     {
+        $project = Project::findOrFail($id_project);
+        if(!$project->userHasAccess(auth()->user())) return $this->responsePermissionDenied();
+
         $request->merge([
             'id_project' => $id_project,
             'id_user' => auth()->user()->id
         ]);
 
-        return $this->responseCreated([
-            'task' => Task::create($request->input())
-        ]);
+        return response()->json(Task::create($request->input()), 201);
     }
 
     /**
@@ -55,15 +59,10 @@ class TaskController extends Controller
     {
         $project = Project::findOrFail($id_project);
 
-        if(!$project->userHasAccess(auth()->user())) $this->responsePermissionDenied();
+        if(!$project->userHasAccess(auth()->user())) return $this->responsePermissionDenied();
 
-        if(!$task = $project->getTasks()->find($id_task))
-        {
-            return $this->responseNotFound();
-        }
+        if(!$task = $project->getTasks()->find($id_task)) return $this->responseNotFound();
 
-        return $this->jsonResponse([
-            'task' => $task
-        ]);
+        return $task;
     }
 }

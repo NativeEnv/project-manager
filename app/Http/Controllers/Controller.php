@@ -50,15 +50,6 @@ class Controller extends BaseController
         return $this->jsonResponse(['error' => 'Permission denied'], 403);
     }
 
-    /**
-     * @param array $data
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function responseCreated(Array $data)
-    {
-        return $this->jsonResponse($data, 201);
-    }
-
     protected function responseNotFound()
     {
         return $this->jsonResponse(['message' => 'Not Found'], 404);
