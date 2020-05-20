@@ -36,7 +36,7 @@ Route::group(['prefix' => 'v1'], function() {
      */
     Route::group(['prefix' => 'users'], function() {
         Route::post('', 'API\v1\UserController@create');
-        Route::get('{id}', 'API\v1\UserController@show')->where('id', '\d+')->middleware('auth:api');
+        Route::get('{id}', 'API\v1\UserController@show')->where('id', '\d+');
     });
 
     /**
@@ -56,7 +56,7 @@ Route::group(['prefix' => 'v1'], function() {
 
 
         /**
-         * Tasks
+         * Tasks for a project
          */
         Route::post('{id_project}/tasks', 'API\v1\TaskController@create')->
                where('id_project', '\d+')->
